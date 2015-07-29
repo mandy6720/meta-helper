@@ -1,0 +1,161 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* ------ General Styles ------- */
+
+body {
+	background: #404A54;
+	color: #E5E9EE;
+	height: 100vh;
+	font-family: 'Raleway', sans-serif;
+}
+
+a {
+	text-decoration: none;
+	color: #E5E9EE;
+}
+
+table {
+	margin-top: 15px;
+}
+
+th, td {
+	padding: 5px 15px;
+}
+
+th {
+	background: #404A54;
+}
+
+tr:nth-child(2n + 1) {
+	background-color: rgba(240, 240, 240, .5);
+}
+
+i {
+	margin-right: 10px;
+}
+
+li {
+	list-style-type: none;
+	text-align: left;
+	margin-bottom: 10px;
+}
+
+/* ------ Sidebar Styles ------- */
+
+#sidebar-container {
+	width: 12%;
+	min-height: 100vh;
+	display: inline-block;
+	vertical-align: top;
+}
+
+#sidebar-container a {
+	display: block;
+	margin: 30px;
+}
+
+/* ------ Header Styles ------- */
+
+#header {
+	width: 100%
+	max-height: 80px;
+	margin: 10px 0;
+	text-align: center;
+	font-family: 'Grand Hotel', cursive;
+	border-bottom: 3px solid #8BDD61;
+	padding: 10px;
+}
+
+#header h1 {
+	font-size: 3em;
+}
+
+
+/* ------ Content Styles ------- */
+
+.content-container {
+	width: 87%;
+	height: 100vh;
+	display: inline-block;
+}
+
+#more-info,
+#edit-client {
+	color: #404A54;
+}
+
+#edit-client input,
+#edit-client textarea {
+	float: right;
+}
+
+
+/* ------ Dashboard Styles ------- */
+
+#dayAtaGlance {
+	width: 30%;
+	height: 100vh;
+	display: inline-block;
+	text-align: center;
+	padding: 30px;
+}
+
+#calendarPage {
+	background-color: #E5E9EE;
+	color: #404A54;
+	padding: 20px;
+	border-top: 40px solid #FF5576;
+}
+
+#today {
+	font-size: 4em;
+}
+
+#todaysAppts {
+	padding: 20px;
+	margin-top: 20px;
+}
+
+#todaysAppts h2 {
+	margin-bottom: 25px;
+}
+
+#callsAtaGlance {
+	width: 69%;
+	display: inline-block;
+	vertical-align: top;
+	padding: 30px;
+}
+
+.vm {
+	display: inline-block;
+	width: 50%;
+	padding: 3px 10px;
+	float: left;
+	border-right: 3px solid #404A54;
+}
+
+.vm:nth-child(4n + 1),
+.vm:nth-child(4n) {
+	background-color: rgba(240, 240, 240, .5);
+}
+
+.calls {
+	width: 30%;
+}
+
+.callBack {
+	float: right;
+	color: #8BDD61;
+	cursor: pointer;
+}
+/* ------ Calendar Styles ------- */
+
+#calendar-container {
+	margin: 10px auto;
+	list-style-type: none;
+}

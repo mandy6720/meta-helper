@@ -1,0 +1,10 @@
+
+	<h1>Calls</h1>
+	<div class="voicemail-container">
+		<div class="voicemail-list">
+			<div class="calls" ng-repeat="voicemail in calls">
+				{{ voicemail.first_name }} {{ voicemail.last_name }} - {{ voicemail.display_phone}}
+			</div>
+		</div>
+		<div class="voicemail-detailed"></div>
+	</div>

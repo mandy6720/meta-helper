@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div class="content-container" ng-controller="CalendarController">
+			
+			<div id="dayAtaGlance">
+				<div id="calendarPage">
+					<h1>Today is:</h1>
+					<span id="today">{{ formattedToday }}</span>
+				</div>
+				<div id="todaysAppts">
+					<h2>Appointments</h2>
+					<ul>
+						<li ng-repeat="appointment in todaysAppts">
+						{{ appointment.first_name}}  {{ appointment.last_name}}</li>
+					</ul>
+				</div>
+			</div>
+
+			<div id="callsAtaGlance" ng-controller="CallsController">
+				<h2>Calls at a Glance</h2>
+				<table>
+					<div class="vm" ng-repeat="voicemail in toCall">	
+						{{ voicemail.first_name }} {{ voicemail.last_name }} - {{ voicemail.display_phone}}
+						<span class="callBack" ng-click="makeActive(voicemail)"><i class="fa fa-phone"></i></span>
+					</div>
+				</table>
+
+				<div id="more-info" class="modal">
+					{{ activeClient.first_name }} {{ activeClient.last_name }} <br />
+					{{ activeClient.display_phone }}<br /><br />
+					<ul>Notes: 
+					<li ng-repeat="note in clientNotes">{{ note.info }}</li>
+					</ul>
+					<button ng-click="toggleEditMode(activeClient)">Edit</button>
+					<button>New Client</button>
+					<button>Book</button>
+				</div>
+
+				<form id="edit-client" ng-controller="ClientController" ng-if="activeClient" class="modal">
+					<label>First Name: <input type="text" ng-model="activeClient.first_name"/></label><br />
+					<label>Last Name: <input type="text" ng-model="activeClient.last_name"/></label><br />
+					<label>Phone Number: <input type="tel" ng-model="activeClient.display_phone"/></label><br />
+					<label>Email: <input type="email" ng-model="activeClient.email"/></label><br />
+					<br />
+					<button ng-click="getClientId(activeClient)">Look up Existing</button>
+					<br />
+					<br />
+					<label>Notes: <textarea id="new-note"></textarea></label><br />
+					<button ng-click="addNewNote(activeClient)">Add Note</button>
+					<button ng-click="cancelEdit(activeClient)">Cancel</button>
+					</ul>
+				</form>
+
+			</div>
+
+
+		</div>
+</body>
+</html>

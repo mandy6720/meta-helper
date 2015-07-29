@@ -1,0 +1,28 @@
+
+
+	<table ng-controller="ClientController">
+				<thead>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Address</th>
+					<th>Zipcode</th>
+					<th>County</th>
+					<th>Phone #</th>
+					<th>Email</th>
+					<th>Family Size</th>
+					<th>Account #</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="client in clients">
+						<td>{{ client.first_name }}</td>
+						<td>{{ client.last_name }}</td>
+						<td>{{ client.address }}</td>
+						<td>{{ client.zip }}</td>
+						<td>{{ client.county }}</td>
+						<td>{{ client.display_phone }}</td>
+						<td>{{ client.email }}</td>
+						<td>{{ client.family_size }}</td>
+						<td>{{ client.account_number }}</td>
+					</tr>
+		 		</tbody>
+			</table>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<table ng-controller="ClientController">
+				<thead>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Address</th>
+					<th>Zipcode</th>
+					<th>County</th>
+					<th>Phone #</th>
+					<th>Email</th>
+					<th>Family Size</th>
+					<th>Account #</th>
+				</thead>
+				<tbody>
+					<tr ng-model="currentClient">
+						<td>{{ first_name }}</td>
+						<td>{{ last_name }}</td>
+						<td>{{ address }}</td>
+						<td>{{ zip }}</td>
+						<td>{{ county }}</td>
+						<td>{{ display_phone }}</td>
+						<td>{{ email }}</td>
+						<td>{{ family_size }}</td>
+						<td>{{ account_number }}</td>
+					</tr>
+		 		</tbody>
+			</table>
+</body>
+</html>
