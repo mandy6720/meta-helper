@@ -21,30 +21,37 @@
 			</div>
 
 			<div id="callsAtaGlance" ng-controller="CallsController">
-				<h2>Calls at a Glance</h2>
+				<h2>Calls at a Glance</h2>  <div id="create-vm" ng-click="openVM()">Create a voicemail</div><br/>
 				<table>
 					<div class="vm" ng-repeat="voicemail in toCall">	
-						{{ voicemail.first_name }} {{ voicemail.last_name }} - {{ voicemail.display_phone}}
+						{{ voicemail.client.first_name }} {{ voicemail.client.last_name }} - {{ voicemail.client.display_phone}}
 						<span class="callBack" ng-click="makeActive(voicemail)"><i class="fa fa-phone"></i></span>
 					</div>
 				</table>
 
 				<div id="more-info" class="modal">
-					{{ activeClient.first_name }} {{ activeClient.last_name }} <br />
-					{{ activeClient.display_phone }}<br /><br />
+					{{ activeClient.client.first_name }} {{ activeClient.client.last_name }} 
+					<span ng-show="activeClient.client.active_client"><i class="fa fa-check"></i></span>
+					<span ng-hide="activeClient.client.active_client"><i class="fa fa-user-times"></i></span>
+					<br />
+					{{ activeClient.client.display_phone }}<br /><br />
+					Next Allowable Appointment: <br />
+					<span>{{ activeClient.client.next_allowable_appointment }} </span>
+					<br />
+					<br />
 					<ul>Notes: 
 					<li ng-repeat="note in clientNotes">{{ note.info }}</li>
 					</ul>
-					<button ng-click="toggleEditMode(activeClient)">Edit</button>
-					<button>New Client</button>
+					<button ng-click="toggleEditNoteMode(activeClient)">Notes</button>
+					<button ng-click="toggleEditClientMode(activeClient)">Edit Client</button>
 					<button>Book</button>
 				</div>
 
-				<form id="edit-client" ng-controller="ClientController" ng-if="activeClient" class="modal">
-					<label>First Name: <input type="text" ng-model="activeClient.first_name"/></label><br />
-					<label>Last Name: <input type="text" ng-model="activeClient.last_name"/></label><br />
-					<label>Phone Number: <input type="tel" ng-model="activeClient.display_phone"/></label><br />
-					<label>Email: <input type="email" ng-model="activeClient.email"/></label><br />
+				<form id="edit-note" ng-controller="ClientController" ng-if="activeClient" class="modal">
+					<label>First Name: <input type="text" ng-model="activeClient.client.first_name"/></label><br />
+					<label>Last Name: <input type="text" ng-model="activeClient.client.last_name"/></label><br />
+					<label>Phone Number: <input type="tel" ng-model="activeClient.client.display_phone"/></label><br />
+
 					<br />
 					<button ng-click="getClientId(activeClient)">Look up Existing</button>
 					<br />
@@ -53,6 +60,45 @@
 					<button ng-click="addNewNote(activeClient)">Add Note</button>
 					<button ng-click="cancelEdit(activeClient)">Cancel</button>
 					</ul>
+				</form>
+
+				<form ng-controller="ClientController" id="edit-client" class="modal">
+					<label>First Name: <input ng-model="activeClient.client.first_name" /></label> 
+					<br />
+					<label>Last Name: <input ng-model="activeClient.client.last_name" /> </label>
+					<br />
+					<label>Address: <input ng-model="activeClient.client.address" /> </label>
+					<br />
+					<label>Zip: <input ng-model="activeClient.client.zip" /> 
+					<br /></label>
+					<label>Phone: <input ng-model="activeClient.client.display_phone" /> 
+					<br /></label>
+					<label>County: <input ng-model="activeClient.client.county" /> 
+					<br /></label>
+					<label>Family Size: <input ng-model="activeClient.client.family_size" /> 
+					<br /></label>
+					<label>Account: <input ng-model="activeClient.client.account_number" /> 
+					<br /></label>
+					<label>Email: <input ng-model="activeClient.client.email" /> 
+					<br /></label>
+
+					<button ng-click="updateClient(activeClient)">Update</button>
+					<button ng-click="cancelEdit(activeClient)">Cancel</button>
+				</form>
+
+
+				<!-- Creates new VM -->
+				<form ng-controller="ClientController" id="add-vm" class="modal">
+					<label>First Name: <input ng-model="newVM.first_name" /></label> 
+					<br />
+					<label>Last Name: <input ng-model="newVM.last_name" /> </label>
+					<br />
+					<label>Phone: <input ng-model="newVM.display_phone" /> 
+					<br /></label>
+					<br />
+					<button ng-click="searchClients(newVM)">Search</button>
+					<button ng-click="addNewVoicemail(newVM)">Add</button>
+					<button ng-click="cancelEdit(activeClient)">Cancel</button>
 				</form>
 
 			</div>

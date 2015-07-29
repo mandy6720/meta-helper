@@ -83,13 +83,17 @@ li {
 	display: inline-block;
 }
 
+#add-vm,
+#edit-client,
 #more-info,
-#edit-client {
+#edit-note {
 	color: #404A54;
 }
 
+#add-vm input,
 #edit-client input,
-#edit-client textarea {
+#edit-note input,
+#edit-note textarea {
 	float: right;
 }
 
@@ -153,6 +157,25 @@ li {
 	color: #8BDD61;
 	cursor: pointer;
 }
+
+#callsAtaGlance h2 {
+	display: inline-block;
+}
+
+#create-vm {
+	float: right;
+	display: inline-block;
+}
+
+.fa-check {
+	color: #8BDD61;
+}
+
+.fa-user-times {
+	color: #FF5576;
+}
+
+
 /* ------ Calendar Styles ------- */
 
 #calendar-container {

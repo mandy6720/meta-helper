@@ -21,11 +21,6 @@ app.config(function ($routeProvider) {
 				controller: 'ClientController',
 				templateUrl: '../templates/clients.html'
 			})
-		.when('/clients/:id.json',
-			{
-				controller: 'ClientController',
-				templateUrl: '../templates/client-info.html'
-			})
 		.when('/calls', 
 			{
 				controller: 'CallsController',
@@ -37,6 +32,13 @@ app.config(function ($routeProvider) {
 
 // Client Controller
 app.controller("ClientController", function($scope, $http){
+
+	// Header stuff for user auth
+	$http.defaults.headers.get = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
+	// Header stuff for user auth
+	$http.defaults.headers.post = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
 
 	// GET request that populates the client list
 	$http.get('http://bookmefish.herokuapp.com/clients.json').
@@ -51,31 +53,78 @@ app.controller("ClientController", function($scope, $http){
 
 	  $scope.currentClient;
 	  $scope.searchId;
+	  $scope.clientNotes;
+
+	  $scope.addNewVoicemail = function(newVM) {
+	  	console.log(newVM)
+	  }
+
+	  $scope.updateClient = function(activeClient) {
+	  	$scope.currentClient = activeClient;
+	  	console.log($scope.currentClient)
+	  	
+	  	// Send note info to the server
+
+	  	/*
+	  	$http.post('http://bookmefish.herokuapp.com/client', {
+	  		client: { 
+	  			first_name: , 
+	  			last_name:, 
+	  			address:, 
+	  			zip:, 
+	  			display_phone:, 
+	  			county:, 
+	  			family_size:, 
+	  			account_number:, 
+	  			email: 
+	  		}
+	  	}).success(function(data){
+	  		console.log("client added")
+	  	}).error(function(data){
+	  		console.log("error! client didn't post", data)
+	  	})
+	  	$scope.currentClient.notes.push({info: newNote});
+
+	  	*/
+	  }
+
+	  $scope.searchClients = function(newVM) {
+
+	  	$http.get('http://bookmefish.herokuapp.com/clients/search?q=' + newVM.first_name + " " + newVM.last_name + " " + newVM.display_phone).
+	  		success(function(data) {
+	  			console.log("sucess", data)
+	  		}).
+	  		error(function(data) {
+	  			console.log("error", data)
+	  		})
+
+	   }
+
 
 	  $scope.addNewNote = function(activeClient) {
 	  	$scope.currentClient = activeClient;
 	  	var newNote = $("#new-note").val();
-	  	console.log("id: " + $scope.currentClient.id);
-	  	console.log(newNote);
+	  	console.log($scope.currentClient);
 	  	// Send note info to the server
-	  	$http.post('http://bookmefish.herokuapp.com/notes/' + 3, {
+	  	$http.post('http://bookmefish.herokuapp.com/voicemails/' + $scope.currentClient.id + "/notes", {
 	  		note: {
-		  		voicemail_id: $scope.currentClient.id,
 		  		info: newNote
 	  		}
 	  	}).success(function(data){
 	  		console.log("note added")
 	  	}).error(function(data){
-	  		console.log("error! note didn't post")
+	  		console.log("error! note didn't post", data)
 	  	})
+	  	$scope.currentClient.notes.push({info: newNote});
 	  }
 
 	  // Searches existing client list for matching name
 	  $scope.getClientId = function(activeClient) {
 	  	$scope.currentClient = activeClient;
+	  	console.log($scope.currentClient)
 	  	var result = _.findWhere(clientList, {
-	  		first_name: $scope.currentClient.first_name,
-	  		last_name: $scope.currentClient.last_name
+	  		first_name: $scope.currentClient.client.first_name,
+	  		last_name: $scope.currentClient.client.last_name
 	  	});
 	  	// If no clients match the name:
 	  	if (!result) {
@@ -98,6 +147,10 @@ app.controller("CalendarController", function($scope, $http) {
 
 	// Header stuff for user auth
 	$http.defaults.headers.get = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
+	// Header stuff for user auth
+	$http.defaults.headers.post = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
 
 	// Sets what today is
 	$scope.today = moment();
@@ -136,20 +189,6 @@ app.controller("CalendarController", function($scope, $http) {
 	    // Renders every appointment in the calendar    
 	    $("#calendar").fullCalendar( 'addEventSource', appointmentsArr);
 
-		// Adds settings and functions to the calendar
-		$("#calendar").fullCalendar({
-			eventClick: function(calEvent, jsEvent, view) {
-
-	        alert('Event: ' + calEvent.title);
-	        alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-	        alert('View: ' + view.name);
-
-	        // change the border color just for fun
-	        $(this).css('border-color', 'red');
-
-	    }
-		});
-
 	  }).
 	  error(function(data) {
 	    console.log("error", data)
@@ -159,7 +198,14 @@ app.controller("CalendarController", function($scope, $http) {
 
 
 // Calls Controller
-app.controller("CallsController", function($scope, $http) {
+app.controller("CallsController", function($scope, $http, $filter) {
+
+	// Header stuff for user auth
+	$http.defaults.headers.get = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
+// Header stuff for user auth
+	$http.defaults.headers.post = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
 
 	// Sets up array of people you need to call (unresolved calls)
 	$scope.toCall = [];
@@ -187,16 +233,24 @@ app.controller("CallsController", function($scope, $http) {
 	  // Grabs info for the modal (pop-up) when you click the little green phone icon
 	  $scope.makeActive = function(voicemail) {
 	  	$scope.activeClient = voicemail;
+	  	$scope.activeClient.client.next_allowable_appointment = moment($scope.activeClient.client.next_allowable_appointment).format("MMM Do YYYY")
 	  	$scope.clientNotes = $scope.activeClient.notes;
 	  	console.log(voicemail.id)
 	  	$('#more-info').modal();
 	  }
 
-	  // Opens modal window to edit client info
-	  $scope.toggleEditMode = function(activeClient) {
+	  // Opens modal window to add or edit notes
+	  $scope.toggleEditNoteMode = function(activeClient) {
 	  	$scope.activeClient = activeClient;
 	  	$scope.clientNotes = $scope.activeClient.notes;
 	  	console.log(activeClient.id)
+	  	$('#edit-note').modal();
+	  }
+
+	  //Toggles Edit Client mode
+	  $scope.toggleEditClientMode = function(activeClient) {
+	  	$scope.activeClient = activeClient;
+	  	$scope.clientNotes = $scope.activeClient.notes;
 	  	$('#edit-client').modal();
 	  }
 
@@ -206,10 +260,17 @@ app.controller("CallsController", function($scope, $http) {
 	  	console.log(activeClient)
 	  	$('#more-info').modal();
 	  }
+
+	  $scope.openVM = function() {
+	  	console.log("clicked!")
+	  	$("#add-vm").modal();
+
+	  }
 })
 
 // effect for sticking the menu to the top of the page on scoll up
 $("#link-list").sticky();
+
 
 
 
