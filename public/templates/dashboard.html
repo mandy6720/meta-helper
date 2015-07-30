@@ -53,8 +53,6 @@
 					<label>Phone Number: <input type="tel" ng-model="activeClient.client.display_phone"/></label><br />
 
 					<br />
-					<button ng-click="getClientId(activeClient)">Look up Existing</button>
-					<br />
 					<br />
 					<label>Notes: <textarea id="new-note"></textarea></label><br />
 					<button ng-click="addNewNote(activeClient)">Add Note</button>
@@ -96,9 +94,7 @@
 					<label>Phone: <input ng-model="newVM.display_phone" /> 
 					<br /></label>
 					<br />
-					<button ng-click="searchClients(newVM)">Search</button>
-					<button ng-click="addNewVoicemail(newVM)">Add</button>
-					<button ng-click="cancelEdit(activeClient)">Cancel</button>
+					<button ng-click="searchClients(newVM)">Add Voicemail</button>
 				</form>
 
 			</div>

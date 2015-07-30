@@ -165,6 +165,7 @@ li {
 #create-vm {
 	float: right;
 	display: inline-block;
+	cursor: pointer;
 }
 
 .fa-check {

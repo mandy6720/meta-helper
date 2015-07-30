@@ -45,19 +45,15 @@ app.controller("ClientController", function($scope, $http){
 	  success(function(data) {
 	    $scope.clients = data.clients;
 	    clientList = data.clients;
-	    console.log("success");
 	  }).
 	  error(function(data) {
 	    console.log("error", data)
 	  });
 
 	  $scope.currentClient;
-	  $scope.searchId;
+	  $scope.activeClient;
 	  $scope.clientNotes;
 
-	  $scope.addNewVoicemail = function(newVM) {
-	  	console.log(newVM)
-	  }
 
 	  $scope.updateClient = function(activeClient) {
 	  	$scope.currentClient = activeClient;
@@ -90,56 +86,86 @@ app.controller("ClientController", function($scope, $http){
 
 	  $scope.searchClients = function(newVM) {
 
+	  	var person = [];
+
 	  	$http.get('http://bookmefish.herokuapp.com/clients/search?q=' + newVM.first_name + " " + newVM.last_name + " " + newVM.display_phone).
 	  		success(function(data) {
-	  			console.log("sucess", data)
+
+	  			person = data;
+
+	  			// if found, use their ID
+	  			if (person.length > 0) {
+	  				console.log(person[0].id)
+
+	  				$http.post('http://bookmefish.herokuapp.com/voicemails', {
+	  					voicemail: {
+	  						client_id: person[0].id
+	  					}
+	  				}).success(function(data) {
+	  					console.log("yay! it worked!");
+	  				}).
+	  				error(function(data){
+	  					console.log("error!", data)
+	  				})
+	  			} else {
+	  				
+	  				// if not found, create a person
+
+	  				$http.post('http://bookmefish.herokuapp.com/clients', {
+	  					client: { 
+	  						first_name: newVM.first_name, 
+	  						last_name: newVM.last_name, 
+	  						display_phone: newVM.display_phone
+	  					}
+	  				}).
+	  				success(function(data){
+	  					console.log("success! new client sent", data);
+	  					// Add voicemail
+	  					$http.post('http://bookmefish.herokuapp.com/voicemails', {
+	  						voicemail: { 
+	  							client_id: data.id
+	  						}
+	  					})
+	  					// go to notes page
+	  					$.modal.close();
+	  					
+	  				}).
+	  				error(function(data){
+	  					console.log("error! didn't post", data)
+	  				})
+
+	  			}
+
 	  		}).
 	  		error(function(data) {
 	  			console.log("error", data)
 	  		})
 
+
 	   }
+
+	   	$scope.toggleEditNoteMode = function(activeClient) {
+		  	$scope.activeClient = activeClient;
+		  	$scope.clientNotes = $scope.activeClient.notes;
+		  	$('#edit-note').modal();
+	  }
 
 
 	  $scope.addNewNote = function(activeClient) {
 	  	$scope.currentClient = activeClient;
 	  	var newNote = $("#new-note").val();
-	  	console.log($scope.currentClient);
 	  	// Send note info to the server
 	  	$http.post('http://bookmefish.herokuapp.com/voicemails/' + $scope.currentClient.id + "/notes", {
 	  		note: {
 		  		info: newNote
 	  		}
 	  	}).success(function(data){
-	  		console.log("note added")
+	  		console.log("note added", data)
 	  	}).error(function(data){
 	  		console.log("error! note didn't post", data)
 	  	})
 	  	$scope.currentClient.notes.push({info: newNote});
 	  }
-
-	  // Searches existing client list for matching name
-	  $scope.getClientId = function(activeClient) {
-	  	$scope.currentClient = activeClient;
-	  	console.log($scope.currentClient)
-	  	var result = _.findWhere(clientList, {
-	  		first_name: $scope.currentClient.client.first_name,
-	  		last_name: $scope.currentClient.client.last_name
-	  	});
-	  	// If no clients match the name:
-	  	if (!result) {
-	  		alert("No clients match that name");
-	  	}
-	  	//note: maybe change this down the road to search by ID
-
-	  	var searchId = result.id;
-	  	console.log(result, searchId);
-
-	  	// Otherwise, if match found:
-	  	if (searchId) {
-	  		alert("Found! Client ID: " + searchId);
-	  	} 
-	}
 
 })
 
@@ -161,7 +187,6 @@ app.controller("CalendarController", function($scope, $http) {
 	  success(function(data) {
 	  
 	    $scope.appointments = data.appointments;
-	    console.log("success");
 
 	    // Sets up appointments array for today to display on the dashboard
 	    $scope.todaysAppts = []; 
@@ -235,7 +260,6 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  	$scope.activeClient = voicemail;
 	  	$scope.activeClient.client.next_allowable_appointment = moment($scope.activeClient.client.next_allowable_appointment).format("MMM Do YYYY")
 	  	$scope.clientNotes = $scope.activeClient.notes;
-	  	console.log(voicemail.id)
 	  	$('#more-info').modal();
 	  }
 
@@ -243,7 +267,6 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  $scope.toggleEditNoteMode = function(activeClient) {
 	  	$scope.activeClient = activeClient;
 	  	$scope.clientNotes = $scope.activeClient.notes;
-	  	console.log(activeClient.id)
 	  	$('#edit-note').modal();
 	  }
 
@@ -257,14 +280,11 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  // Cancels edit
 	  $scope.cancelEdit = function(activeClient) {
 	  	$scope.activeClient = activeClient;
-	  	console.log(activeClient)
 	  	$('#more-info').modal();
 	  }
 
 	  $scope.openVM = function() {
-	  	console.log("clicked!")
 	  	$("#add-vm").modal();
-
 	  }
 })
 
