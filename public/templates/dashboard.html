@@ -21,7 +21,7 @@
 			</div>
 
 			<div id="callsAtaGlance" ng-controller="CallsController">
-				<h2>Calls at a Glance</h2>  <div id="create-vm" ng-click="openVM()">Create a voicemail</div><br/>
+				<h2>Calls at a Glance</h2>  <div id="create-vm" ng-click="openVM()">Log a voicemail</div><br/>
 				<table>
 					<div class="vm" ng-repeat="voicemail in toCall">	
 						{{ voicemail.client.first_name }} {{ voicemail.client.last_name }} - {{ voicemail.client.display_phone}}
@@ -94,7 +94,10 @@
 					<label>Phone: <input ng-model="newVM.display_phone" /> 
 					<br /></label>
 					<br />
+					<label>Notes:<textarea id="vm-note"></textarea></label>
+					<br />
 					<button ng-click="searchClients(newVM)">Add Voicemail</button>
+					<br /><br />
 				</form>
 
 			</div>

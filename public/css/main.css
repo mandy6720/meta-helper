@@ -91,6 +91,7 @@ li {
 }
 
 #add-vm input,
+#add-vm textarea,
 #edit-client input,
 #edit-note input,
 #edit-note textarea {
@@ -166,6 +167,10 @@ li {
 	float: right;
 	display: inline-block;
 	cursor: pointer;
+}
+
+#add-vm label {
+	vertical-align: top;
 }
 
 .fa-check {

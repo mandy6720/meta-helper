@@ -39,6 +39,10 @@ app.controller("ClientController", function($scope, $http){
 	// Header stuff for user auth
 	$http.defaults.headers.post = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
 
+	// Header stuff for user auth
+	$http.defaults.headers.patch = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
+
 
 	// GET request that populates the client list
 	$http.get('http://bookmefish.herokuapp.com/clients.json').
@@ -167,6 +171,24 @@ app.controller("ClientController", function($scope, $http){
 	  	$scope.currentClient.notes.push({info: newNote});
 	  }
 
+	  // Basically the same function as above, but for the Log Voicemail window
+	  $scope.addVMNote = function(activeClient) {
+	  	$scope.currentClient = activeClient;
+	  	var newNote = $("#vm-note").val();
+	  	console.log(newNote)
+	  	// Send note info to the server
+	  	$http.post('http://bookmefish.herokuapp.com/voicemails/' + $scope.currentClient.id + "/notes", {
+	  		note: {
+		  		info: newNote
+	  		}
+	  	}).success(function(data){
+	  		console.log("note added", data)
+	  	}).error(function(data){
+	  		console.log("error! note didn't post", data)
+	  	})
+	  	$scope.currentClient.notes.push({info: newNote});
+	  }
+
 })
 
 app.controller("CalendarController", function($scope, $http) {
@@ -176,6 +198,10 @@ app.controller("CalendarController", function($scope, $http) {
 
 	// Header stuff for user auth
 	$http.defaults.headers.post = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
+	// Header stuff for user auth
+	$http.defaults.headers.patch = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
 
 
 	// Sets what today is
@@ -230,6 +256,10 @@ app.controller("CallsController", function($scope, $http, $filter) {
 
 // Header stuff for user auth
 	$http.defaults.headers.post = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
+	// Header stuff for user auth
+	$http.defaults.headers.patch = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+
 
 
 	// Sets up array of people you need to call (unresolved calls)
