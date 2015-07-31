@@ -83,20 +83,15 @@ li {
 	display: inline-block;
 }
 
-#add-vm,
-#edit-client,
-#more-info,
-#edit-note {
+.modal {
 	color: #404A54;
 }
 
-#add-vm input,
-#add-vm textarea,
-#edit-client input,
-#edit-note input,
-#edit-note textarea {
+.modal input,
+.modal textarea {
 	float: right;
 }
+
 
 
 /* ------ Dashboard Styles ------- */
@@ -187,4 +182,5 @@ li {
 #calendar-container {
 	margin: 10px auto;
 	list-style-type: none;
+	max-width: 80%;
 }

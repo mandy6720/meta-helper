@@ -40,7 +40,7 @@ app.controller("ClientController", function($scope, $http){
 	$http.defaults.headers.post = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
 
 	// Header stuff for user auth
-	$http.defaults.headers.patch = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+	$http.defaults.headers.put = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
 
 
 
@@ -60,32 +60,34 @@ app.controller("ClientController", function($scope, $http){
 
 
 	  $scope.updateClient = function(activeClient) {
-	  	$scope.currentClient = activeClient;
-	  	console.log($scope.currentClient)
+	  	
+	  	//Need to make a call to grab actual client object
+
+
+	  	$scope.activeClient = activeClient;
+	  	console.log($scope.activeClient)
 	  	
 	  	// Send note info to the server
 
-	  	/*
-	  	$http.post('http://bookmefish.herokuapp.com/client', {
+	 
+	  	$http.put('http://bookmefish.herokuapp.com/clients/' + activeClient.client.id, {
 	  		client: { 
-	  			first_name: , 
-	  			last_name:, 
-	  			address:, 
-	  			zip:, 
-	  			display_phone:, 
-	  			county:, 
-	  			family_size:, 
-	  			account_number:, 
-	  			email: 
+	  			first_name: $scope.activeClient.client.first_name, 
+	  			last_name: $scope.activeClient.client.last_name, 
+	  			address: $scope.activeClient.client.address, 
+	  			zip: $scope.activeClient.client.zip, 
+	  			display_phone: $scope.activeClient.client.display_phone, 
+	  			county: $scope.activeClient.client.county, 
+	  			family_size: $scope.activeClient.client.family_size, 
+	  			account_number: $scope.activeClient.client.account_number, 
+	  			email: $scope.activeClient.client.email
 	  		}
 	  	}).success(function(data){
-	  		console.log("client added")
+	  		console.log("client updated!")
 	  	}).error(function(data){
 	  		console.log("error! client didn't post", data)
 	  	})
-	  	$scope.currentClient.notes.push({info: newNote});
 
-	  	*/
 	  }
 
 	  $scope.searchClients = function(newVM) {
@@ -130,7 +132,8 @@ app.controller("ClientController", function($scope, $http){
 	  							client_id: data.id
 	  						}
 	  					})
-	  					// go to notes page
+	  					
+	  					// Ideally, posts a note ...
 	  					$.modal.close();
 	  					
 	  				}).
@@ -171,23 +174,6 @@ app.controller("ClientController", function($scope, $http){
 	  	$scope.currentClient.notes.push({info: newNote});
 	  }
 
-	  // Basically the same function as above, but for the Log Voicemail window
-	  $scope.addVMNote = function(activeClient) {
-	  	$scope.currentClient = activeClient;
-	  	var newNote = $("#vm-note").val();
-	  	console.log(newNote)
-	  	// Send note info to the server
-	  	$http.post('http://bookmefish.herokuapp.com/voicemails/' + $scope.currentClient.id + "/notes", {
-	  		note: {
-		  		info: newNote
-	  		}
-	  	}).success(function(data){
-	  		console.log("note added", data)
-	  	}).error(function(data){
-	  		console.log("error! note didn't post", data)
-	  	})
-	  	$scope.currentClient.notes.push({info: newNote});
-	  }
 
 })
 
@@ -200,7 +186,7 @@ app.controller("CalendarController", function($scope, $http) {
 	$http.defaults.headers.post = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
 
 	// Header stuff for user auth
-	$http.defaults.headers.patch = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
+	$http.defaults.headers.put = { 'Authorization' : 'VALUE_THAT_SHOULDNT_BE_HARDCODED_BUT_IS_RIGHT_NOW' }
 
 
 
@@ -244,6 +230,35 @@ app.controller("CalendarController", function($scope, $http) {
 	  error(function(data) {
 	    console.log("error", data)
 	  });
+
+	  $scope.pantryDay;
+
+	  $scope.closeModal = function() {
+	  	$.modal.close();
+	  }
+
+	  $scope.createPD = function() {
+	  	$("#create-pd").modal();
+	  }
+
+	  $scope.addPD = function(pantryDay) {
+	  	console.log(pantryDay)
+	  	var dateSelected = $("#datepicker").val();
+	  	dateSelected = moment.utc(dateSelected)
+	  	$http.post("http://bookmefish.herokuapp.com/pantry_days", {
+	  		pantry_day: {
+	  			date_time: dateSelected,
+	  			num_volunteers: pantryDay.num_volunteers, 
+	  			max_num_clients: pantryDay.max_num_clients
+	  		}
+	  	}).
+	  	success(function(data) {
+	  		console.log("created pantry day!", data);
+	  	}).
+	  	error(function(data){
+	  		console.log("error! coudn't create pantry day!")
+	  	})
+	  }
 
 })
 
