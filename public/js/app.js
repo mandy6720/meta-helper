@@ -232,6 +232,7 @@ app.controller("CalendarController", function($scope, $http) {
 	  });
 
 	  $scope.pantryDay;
+	  $scope.pantryDays = [];
 
 	  $scope.closeModal = function() {
 	  	$.modal.close();
@@ -259,6 +260,22 @@ app.controller("CalendarController", function($scope, $http) {
 	  		console.log("error! coudn't create pantry day!")
 	  	})
 	  }
+
+	  $scope.openEditPD = function(){
+		$("#edit-pd").modal();
+	  }
+
+	$scope.editPD = function() {
+		$scope.pantryDays = $http.get("http://bookmefish.herokuapp.com/pantry_days").
+			success(function(data){
+				console.log("Got pantry days!", data)
+			}).
+			error(function(data) {
+				console.log("error! couldn't get pantry days!")
+			})
+			console.log(pantryDays)
+	}
+
 
 })
 
@@ -312,6 +329,7 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  $scope.toggleEditNoteMode = function(activeClient) {
 	  	$scope.activeClient = activeClient;
 	  	$scope.clientNotes = $scope.activeClient.notes;
+	  	console.log(activeClient)
 	  	$('#edit-note').modal();
 	  }
 
@@ -330,6 +348,21 @@ app.controller("CallsController", function($scope, $http, $filter) {
 
 	  $scope.openVM = function() {
 	  	$("#add-vm").modal();
+	  }
+
+	  $scope.resolve = function(activeClient){
+	  	console.log(activeClient)
+
+	  	$http.put('http://bookmefish.herokuapp.com/voicemails/' + activeClient.id, {
+	  		voicemail: { 
+	  			resolved: activeClient.resolved, 
+	  			out_of_area: activeClient.out_of_area,
+	  			above_income: activeClient.above_income,
+	  			needs_other: activeClient.needs_other,
+	  			no_docs: activeClient.no_docs,
+	  			time_with_call: activeClient.ime_with_call
+	  		}
+	  	})
 	  }
 })
 

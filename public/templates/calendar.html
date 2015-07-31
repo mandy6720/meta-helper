@@ -1,6 +1,6 @@
 	<div id="calendar-container">
 		<div id="new-pd" class="btn" ng-click="createPD()">Create a pantry day</div>
-		<div id="edit-pd" class="btn">Edit a pantry day</div>
+		<div id="edit-pd-btn" class="btn" ng-click="openEditPD()">Edit a pantry day</div>
 		<div id="calendar"></div>
 	</div>	
 
@@ -16,8 +16,22 @@
 		<button ng-click="closeModal()">Cancel</button>
 	</div>
 
+	<div class="modal" id="edit-pd">
+		<h2>Edit a Pantry Day</h2><br/>
+		<label>Choose a date: <input id="edit-datepicker" ng-model="pantryDay.date_time"/></label>
+		<br /><br />
+		<label>Number of Volunteers: <input type="number" ng-model="pantryDay.num_volunteers" /></label>
+		<br />
+		<label>Maximum # of Clients: <input type="number" ng-model="pantryDay.max_num_clients" /></label>
+		<br /><br />
+		<button ng-click="editPD(pantryDay)">Create Pantry Day</button>
+		<button ng-click="closeModal()">Cancel</button>
+
+	</div>
+
 	<script>
 		$('#calendar').fullCalendar();
 		$( "#datepicker" ).datepicker();
+		$( "#edit-datepicker" ).datepicker();
 	</script>
 

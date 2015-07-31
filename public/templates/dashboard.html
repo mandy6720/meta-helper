@@ -44,7 +44,8 @@
 					</ul>
 					<button ng-click="toggleEditNoteMode(activeClient)">Notes</button>
 					<button ng-click="toggleEditClientMode(activeClient)">Edit Client</button>
-					<button>Book</button>
+					<button>Book</button><br />
+					<label>Resolved?<input type="checkbox" ng-model="activeClient.resolved" class="resolved-check" ng-click="resolve(activeClient)"/></label>
 				</div>
 
 				<form id="edit-note" ng-controller="ClientController" ng-if="activeClient" class="modal">
