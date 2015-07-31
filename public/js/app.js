@@ -80,10 +80,12 @@ app.controller("ClientController", function($scope, $http){
 	  			county: $scope.activeClient.client.county, 
 	  			family_size: $scope.activeClient.client.family_size, 
 	  			account_number: $scope.activeClient.client.account_number, 
-	  			email: $scope.activeClient.client.email
+	  			email: $scope.activeClient.client.email,
+	  			active_client: $scope.activeClient.client.active_client
 	  		}
 	  	}).success(function(data){
-	  		console.log("client updated!")
+	  		console.log("client updated!");
+	  		$.modal.close();
 	  	}).error(function(data){
 	  		console.log("error! client didn't post", data)
 	  	})
@@ -133,7 +135,7 @@ app.controller("ClientController", function($scope, $http){
 	  						}
 	  					})
 	  					
-	  					// Ideally, posts a note ...
+	  					// Ideally, posts a note ... then:
 	  					$.modal.close();
 	  					
 	  				}).
@@ -172,6 +174,7 @@ app.controller("ClientController", function($scope, $http){
 	  		console.log("error! note didn't post", data)
 	  	})
 	  	$scope.currentClient.notes.push({info: newNote});
+	  	$.modal.close();
 	  }
 
 
@@ -234,6 +237,17 @@ app.controller("CalendarController", function($scope, $http) {
 	  $scope.pantryDay;
 	  $scope.pantryDays = [];
 
+	  // Get the pantry days from the server
+	  $http.get("http://bookmefish.herokuapp.com/pantry_days.json").
+			success(function(data){
+				console.log("Got pantry days!")
+				$scope.pantryDays = data.pantry_days;
+				console.log($scope.pantryDays)
+			}).
+			error(function(data) {
+				console.log("error! couldn't get pantry days!")
+			})
+
 	  $scope.closeModal = function() {
 	  	$.modal.close();
 	  }
@@ -261,19 +275,14 @@ app.controller("CalendarController", function($scope, $http) {
 	  	})
 	  }
 
-	  $scope.openEditPD = function(){
+	// Opens the EDIT pantry days window
+	$scope.openEditPD = function(){
 		$("#edit-pd").modal();
-	  }
+	}
 
+	// Edit pantry days function
 	$scope.editPD = function() {
-		$scope.pantryDays = $http.get("http://bookmefish.herokuapp.com/pantry_days").
-			success(function(data){
-				console.log("Got pantry days!", data)
-			}).
-			error(function(data) {
-				console.log("error! couldn't get pantry days!")
-			})
-			console.log(pantryDays)
+			
 	}
 
 

@@ -68,19 +68,20 @@
 					<br />
 					<label>Address: <input ng-model="activeClient.client.address" /> </label>
 					<br />
-					<label>Zip: <input ng-model="activeClient.client.zip" /> 
-					<br /></label>
-					<label>Phone: <input ng-model="activeClient.client.display_phone" /> 
-					<br /></label>
-					<label>County: <input ng-model="activeClient.client.county" /> 
-					<br /></label>
-					<label>Family Size: <input ng-model="activeClient.client.family_size" /> 
-					<br /></label>
-					<label>Account: <input ng-model="activeClient.client.account_number" /> 
-					<br /></label>
-					<label>Email: <input ng-model="activeClient.client.email" /> 
-					<br /></label>
-
+					<label>Zip: <input ng-model="activeClient.client.zip" /> </label>
+					<br />
+					<label>Phone: <input ng-model="activeClient.client.display_phone" /> </label>
+					<br />
+					<label>County: <input ng-model="activeClient.client.county" /> </label>
+					<br />
+					<label>Family Size: <input ng-model="activeClient.client.family_size" /> </label>
+					<br />
+					<label>Account: <input ng-model="activeClient.client.account_number" /> </label>
+					<br />
+					<label>Email: <input ng-model="activeClient.client.email" /></label>
+					<br />
+					<label>Active Client? <input type="checkbox" ng-model="activeClient.client.active_client"></label>
+					<br /><br />
 					<button ng-click="updateClient(activeClient)">Update</button>
 					<button ng-click="cancelEdit(activeClient)">Cancel</button>
 				</form>

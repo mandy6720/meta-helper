@@ -184,3 +184,15 @@ li {
 	list-style-type: none;
 	max-width: 80%;
 }
+
+#new-pd,
+#edit-pd-btn {
+	display: inline-block;
+	margin-bottom: 15px;
+	border: 1px solid #E5E9EE;
+	padding: 8px;
+}
+
+#edit-pd-btn {
+	float: right;
+}
