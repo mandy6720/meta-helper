@@ -92,6 +92,8 @@ app.controller("ClientController", function($scope, $http){
 
 	  }
 
+
+
 	  $scope.searchClients = function(newVM) {
 
 	  	var person = [];
@@ -280,9 +282,44 @@ app.controller("CalendarController", function($scope, $http) {
 		$("#edit-pd").modal();
 	}
 
+	// Search pantry days function
+	$scope.searchPDs = function(pantryDay) {
+		var searchedPD = $("#edit-datepicker").val();
+		var searchResult;
+
+		for (var i = 0; i < $scope.pantryDays.length; i++) {
+			var current = $scope.pantryDays[i];
+			current.date_time = moment(current.date_time).format('L')
+
+			if (current.date_time == searchedPD) {
+				console.log("match!");
+				searchResult = current;
+			} 
+
+		}
+		if (!searchResult) {
+				alert("This isn't a pantry day (yet)!")
+			} else {
+				$scope.pantryDay = searchResult
+			}
+
+	}
+
 	// Edit pantry days function
-	$scope.editPD = function() {
-			
+	$scope.editPD = function(pantryDay) {
+		$http.put('http://bookmefish.herokuapp.com/pantry_days/' + pantryDay.id, {
+			pantry_day: { 
+				num_volunteers: pantryDay.num_volunteers,
+				max_num_clients: pantryDay.max_num_clients
+			}
+		}).
+		success(function(data) {
+			console.log("pantry day updated!");
+			$.modal.close();
+		}).
+		error(function(data){
+			console.log("Error! Pantry day didn't post!")
+		})
 	}
 
 
@@ -369,7 +406,7 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  			above_income: activeClient.above_income,
 	  			needs_other: activeClient.needs_other,
 	  			no_docs: activeClient.no_docs,
-	  			time_with_call: activeClient.ime_with_call
+	  			time_with_call: activeClient.time_with_call
 	  		}
 	  	})
 	  }
