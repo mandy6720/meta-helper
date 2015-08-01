@@ -44,7 +44,7 @@
 					</ul>
 					<button ng-click="toggleEditNoteMode(activeClient)">Notes</button>
 					<button ng-click="toggleEditClientMode(activeClient)">Edit Client</button>
-					<button>Book</button><br />
+					<button ng-click="openBooking(activeClient)">Book</button><br /><br />
 					<label>Resolved?<input type="checkbox" ng-model="activeClient.resolved" class="resolved-check" ng-click="resolve(activeClient)"/></label>
 				</div>
 
@@ -102,9 +102,21 @@
 					<br /><br />
 				</form>
 
+				<!-- Books a client -->
+				<form id="book-client" class="modal">
+					<h2>Book a client</h2><br /><br />
+					<label>Date: <input id="book-datepicker" /></label><br /><br />
+					<button ng-click="searchAvail(activeClient)">Search availability</button>
+					<label></label>
+				</form>
+
 			</div>
 
 
 		</div>
+
+		<script>
+		$( "#book-datepicker").datepicker();
+		</script>
 </body>
 </html>

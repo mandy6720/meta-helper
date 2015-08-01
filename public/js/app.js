@@ -361,6 +361,7 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	    console.log("error", data)
 	  });
 
+
 	  //Sets up activeClient variable on $scope
 	  $scope.activeClient;
 
@@ -410,6 +411,17 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  			time_with_call: activeClient.time_with_call
 	  		}
 	  	})
+	  }
+
+	  // Opens booking screen
+	  $scope.openBooking = function(activeClient) {
+	  	$("#book-client").modal();
+	  }
+
+	  // Searches availability when booking
+	  $scope.searchAvail = function(activeClient){
+	  	console.log(activeClient, $scope.pantryDays);
+	  	var searchedDate = $('#book-datepicker').val();
 	  }
 })
 
