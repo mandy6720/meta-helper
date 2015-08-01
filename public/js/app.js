@@ -271,6 +271,7 @@ app.controller("CalendarController", function($scope, $http) {
 	  	}).
 	  	success(function(data) {
 	  		console.log("created pantry day!", data);
+	  		$.modal.close();
 	  	}).
 	  	error(function(data){
 	  		console.log("error! coudn't create pantry day!")
