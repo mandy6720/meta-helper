@@ -244,7 +244,6 @@ app.controller("CalendarController", function($scope, $http) {
 			success(function(data){
 				console.log("Got pantry days!")
 				$scope.pantryDays = data.pantry_days;
-				console.log($scope.pantryDays)
 			}).
 			error(function(data) {
 				console.log("error! couldn't get pantry days!")
@@ -377,7 +376,6 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  $scope.toggleEditNoteMode = function(activeClient) {
 	  	$scope.activeClient = activeClient;
 	  	$scope.clientNotes = $scope.activeClient.notes;
-	  	console.log(activeClient)
 	  	$('#edit-note').modal();
 	  }
 
@@ -399,7 +397,6 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  }
 
 	  $scope.resolve = function(activeClient){
-	  	console.log(activeClient)
 
 	  	$http.put('http://bookmefish.herokuapp.com/voicemails/' + activeClient.id, {
 	  		voicemail: { 
@@ -420,8 +417,30 @@ app.controller("CallsController", function($scope, $http, $filter) {
 
 	  // Searches availability when booking
 	  $scope.searchAvail = function(activeClient){
-	  	console.log(activeClient, $scope.pantryDays);
+	  	
 	  	var searchedDate = $('#book-datepicker').val();
+	  	var formattedPDs = $scope.pantryDays;
+
+	  	for (var i = 0; i < $scope.pantryDays.length; i++) {
+	  		formattedPDs[i].date_time = moment(formattedPDs[i].date_time).format('L');
+	  	}
+
+	  	// Check if the date is a pantry day
+	  	var result = _.findWhere(formattedPDs, {date_time: searchedDate});
+
+	  	if (!result){
+	  		alert("That's not a pantry day (yet)!")
+	  	}
+	  	// If it is...
+	  	if (result) {
+	  		// Checks if there is availability on that day
+	  		if (result.open_slot === false) {
+	  			alert("No availability on this day!");
+	  		}
+	  		else {
+	  			console.log("Open slots!")
+	  		}
+	  	}
 	  }
 })
 
