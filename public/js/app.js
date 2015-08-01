@@ -438,7 +438,8 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  			alert("No availability on this day!");
 	  		}
 	  		else {
-	  			console.log("Open slots!")
+	  			console.log("Open slots!");
+	  			$("#found-avail").append('<i class="fa fa-check"></i>')
 	  		}
 	  	}
 	  }
