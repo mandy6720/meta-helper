@@ -438,10 +438,39 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  			alert("No availability on this day!");
 	  		}
 	  		else {
-	  			console.log("Open slots!");
-	  			$("#found-avail").append('<i class="fa fa-check"></i>')
+	  			$("#found-avail").append('<i class="fa fa-check"></i>');
 	  		}
 	  	}
+	  }
+
+	  $scope.addAppt = function(activeClient) {
+
+	  	// Format the pantry days array for searching
+	  	var formattedPDs = $scope.pantryDays;
+	  	var date = $("#book-datepicker").val();
+
+	  	for (var i = 0; i < $scope.pantryDays.length; i++) {
+	  		formattedPDs[i].date_time = moment(formattedPDs[i].date_time).format('L');
+	  	}
+
+	  	// Check if the date is a pantry day
+	  	var apptDate = _.findWhere(formattedPDs, {date_time: date});
+	  	
+	  	// Send appt to server
+	  	$http.post("http://bookmefish.herokuapp.com/appointments", {
+	  		appointment: { 
+	  			pantry_day_id: apptDate.id, 
+	  			client_id: activeClient.client.id,
+	  			utilities: activeClient.utilities
+	  		}
+	  	}).
+	  	success(function(data){
+	  		$.modal.close();
+	  	}).
+	  	error(function(data){
+	  		console.log("Error! Couldn't book appt!")
+	  	})
+
 	  }
 })
 

@@ -108,7 +108,9 @@
 					<label>Date: <input id="book-datepicker" /></label> 
 					<span id="found-avail"></span>
 					<br /><br />
+					<label>Utilities? <input type="checkbox" ng-model="activeClient.utilities"></label><br /><br />
 					<button ng-click="searchAvail(activeClient)">Search availability</button>
+					<button ng-click="addAppt(activeClient)">Add Appointment</button>
 					<label></label>
 				</form>
 
