@@ -6,7 +6,7 @@
 
 	<div id="create-pd" class="modal">
 		<h2>Create a Pantry Day</h2><br/>
-		<label>Choose a date: <input id="datepicker" ng-model="pantryDay.date_time"/></label>
+		<label>Choose a date: <input id="datepicker" ng-model="pantryDay.date_time" type="date"/></label>
 		<br /><br />
 		<label>Number of Volunteers: <input type="number" ng-model="pantryDay.num_volunteers" /></label>
 		<br />
@@ -32,7 +32,5 @@
 
 	<script>
 		$('#calendar').fullCalendar();
-		$( "#datepicker" ).datepicker();
-		$( "#edit-datepicker" ).datepicker();
 	</script>
 

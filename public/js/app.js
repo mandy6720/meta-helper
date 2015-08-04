@@ -158,7 +158,9 @@ app.controller("ClientController", function($scope, $http){
 	   	$scope.toggleEditNoteMode = function(activeClient) {
 		  	$scope.activeClient = activeClient;
 		  	$scope.clientNotes = $scope.activeClient.notes;
-		  	$('#edit-note').modal();
+		  	$('#edit-note').modal({
+	  		showClose: false
+	  	});
 	  }
 
 
@@ -242,7 +244,6 @@ app.controller("CalendarController", function($scope, $http) {
 	  // Get the pantry days from the server
 	  $http.get("http://bookmefish.herokuapp.com/pantry_days.json").
 			success(function(data){
-				console.log("Got pantry days!")
 				$scope.pantryDays = data.pantry_days;
 			}).
 			error(function(data) {
@@ -254,7 +255,9 @@ app.controller("CalendarController", function($scope, $http) {
 	  }
 
 	  $scope.createPD = function() {
-	  	$("#create-pd").modal();
+	  	$("#create-pd").modal({
+	  		showClose: false
+	  	});
 	  }
 
 	  $scope.addPD = function(pantryDay) {
@@ -279,7 +282,9 @@ app.controller("CalendarController", function($scope, $http) {
 
 	// Opens the EDIT pantry days window
 	$scope.openEditPD = function(){
-		$("#edit-pd").modal();
+		$("#edit-pd").modal({
+			showClose: false
+		});
 	}
 
 	// Search pantry days function
@@ -369,31 +374,41 @@ app.controller("CallsController", function($scope, $http, $filter) {
 	  	$scope.activeClient = voicemail;
 	  	$scope.activeClient.client.next_allowable_appointment = moment($scope.activeClient.client.next_allowable_appointment).format("MMM Do YYYY")
 	  	$scope.clientNotes = $scope.activeClient.notes;
-	  	$('#more-info').modal();
+	  	$('#more-info').modal({
+	  		showClose: false
+	  	});
 	  }
 
 	  // Opens modal window to add or edit notes
 	  $scope.toggleEditNoteMode = function(activeClient) {
 	  	$scope.activeClient = activeClient;
 	  	$scope.clientNotes = $scope.activeClient.notes;
-	  	$('#edit-note').modal();
+	  	$('#edit-note').modal({
+	  		showClose: false
+	  	});
 	  }
 
 	  //Toggles Edit Client mode
 	  $scope.toggleEditClientMode = function(activeClient) {
 	  	$scope.activeClient = activeClient;
 	  	$scope.clientNotes = $scope.activeClient.notes;
-	  	$('#edit-client').modal();
+	  	$('#edit-client').modal({
+	  		showClose: false
+	  	});
 	  }
 
 	  // Cancels edit
 	  $scope.cancelEdit = function(activeClient) {
 	  	$scope.activeClient = activeClient;
-	  	$('#more-info').modal();
+	  	$('#more-info').modal({
+	  		showClose: false
+	  	});
 	  }
 
 	  $scope.openVM = function() {
-	  	$("#add-vm").modal();
+	  	$("#add-vm").modal({
+	  		showClose: false
+	  	});
 	  }
 
 	  $scope.resolve = function(activeClient){
@@ -412,7 +427,9 @@ app.controller("CallsController", function($scope, $http, $filter) {
 
 	  // Opens booking screen
 	  $scope.openBooking = function(activeClient) {
-	  	$("#book-client").modal();
+	  	$("#book-client").modal({
+	  		showClose: false
+	  	});
 	  }
 
 	  // Searches availability when booking

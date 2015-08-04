@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
-	<div class="content-container" ng-controller="CalendarController">
+	<div class="content-container">
 			
 			<div id="dayAtaGlance">
 				<div id="calendarPage">
@@ -24,8 +18,11 @@
 				<h2>Calls at a Glance</h2>  <div id="create-vm" ng-click="openVM()">Log a voicemail</div><br/>
 				<table>
 					<div class="vm" ng-repeat="voicemail in toCall">	
-						{{ voicemail.client.first_name }} {{ voicemail.client.last_name }} - {{ voicemail.client.display_phone}}
-						<span class="callBack" ng-click="makeActive(voicemail)"><i class="fa fa-phone"></i></span>
+						<div>{{ voicemail.client.first_name }} {{ voicemail.client.last_name }}</div>
+						<div>
+							{{ voicemail.client.display_phone}}
+							<span class="callBack" ng-click="makeActive(voicemail)"><i class="fa fa-phone"></i></span>
+						</div>
 					</div>
 				</table>
 
@@ -117,10 +114,5 @@
 			</div>
 
 
-		</div>
+	</div>
 
-		<script>
-		$( "#book-datepicker").datepicker();
-		</script>
-</body>
-</html>
