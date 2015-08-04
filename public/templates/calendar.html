@@ -18,13 +18,18 @@
 
 	<div class="modal" id="edit-pd">
 		<h2>Edit a Pantry Day</h2><br/>
-		<label>Choose a date: <input id="edit-datepicker" ng-model="pantryDay.date_time"/></label>
+		<label>
+			Choose a date: 
+			<select 
+				ng-options="day.date_time as day.formatted_date for day in pantryDays"
+				ng-model="pantryDay.date_time">
+			</select>
+		</label>
 		<br /><br />
 		<label>Number of Volunteers: <input type="number" ng-model="pantryDay.num_volunteers" /></label>
 		<br />
 		<label>Maximum # of Clients: <input type="number" ng-model="pantryDay.max_num_clients" /></label>
 		<br /><br />
-		<button ng-click="searchPDs(pantryDay)">Search Pantry days</button>
 		<button ng-click="editPD(pantryDay)">Update Pantry Day</button>
 		<button ng-click="closeModal()">Cancel</button>
 

@@ -96,13 +96,70 @@ app.controller("ClientController", function($scope, $http){
 
 	  $scope.searchClients = function(newVM) {
 
-	  	var person = [];
-
 	  	$http.get('http://bookmefish.herokuapp.com/clients/search?q=' + newVM.first_name + " " + newVM.last_name + " " + newVM.display_phone).
 	  		success(function(data) {
 
-	  			person = data;
+	  			$scope.clients = data.map(function(person){
+	  				return {
+	  					data: person.first_name + " " + person.last_name + " (" + person.display_phone + ")", 
+	  					id: person.id
+	  				}
+	  			})
+	  			$scope.clients.unshift({
+	  				data: "New Client",
+	  				id: 0
+	  			})
 
+	  			$scope.newVM.clientID = 0
+
+	  			$scope.clientSearched = true
+				}).
+	  		error(function(data) {
+	  			console.log("error", data)
+	  		})
+
+	   }
+
+	  	$scope.addVoicemail = function(newVM) {
+	  		if (newVM.clientID === 0) {
+	  			$http.post('http://bookmefish.herokuapp.com/clients', {
+	  					client: { 
+	  						first_name: newVM.first_name, 
+	  						last_name: newVM.last_name, 
+	  						display_phone: newVM.display_phone
+	  					}
+	  				}).
+	  				success(function(data){
+	  					console.log("success! new client sent", data);
+	  					// Add voicemail
+	  					$http.post('http://bookmefish.herokuapp.com/voicemails', {
+	  						voicemail: { 
+	  							client_id: data.id
+	  						}
+	  					})
+	  					
+	  					// Ideally, posts a note ... then:
+	  					$.modal.close();
+	  					
+	  				}).
+	  				error(function(data){
+	  					console.log("error! didn't post", data)
+	  				})
+	  		}
+	  		else {
+	  			$http.post('http://bookmefish.herokuapp.com/voicemails', {
+	  					voicemail: {
+	  						client_id: newVM.clientID
+	  					}
+	  				}).success(function(data) {
+	  					$.modal.close();
+	  				}).
+	  				error(function(data){
+	  					console.log("error!", data)
+	  				})
+	  		}
+	   	}
+	  			/*
 	  			// if found, use their ID
 	  			if (person.length > 0) {
 	  				console.log(person[0].id)
@@ -146,14 +203,8 @@ app.controller("ClientController", function($scope, $http){
 	  				})
 
 	  			}
-
-	  		}).
-	  		error(function(data) {
-	  			console.log("error", data)
-	  		})
-
-
-	   }
+					*/
+	  		
 
 	   	$scope.toggleEditNoteMode = function(activeClient) {
 		  	$scope.activeClient = activeClient;
@@ -244,7 +295,10 @@ app.controller("CalendarController", function($scope, $http) {
 	  // Get the pantry days from the server
 	  $http.get("http://bookmefish.herokuapp.com/pantry_days.json").
 			success(function(data){
-				$scope.pantryDays = data.pantry_days;
+				$scope.pantryDays = data.pantry_days.map(function(day){
+					day.formatted_date = moment(day.date_time).format("L")
+					return day
+				});
 			}).
 			error(function(data) {
 				console.log("error! couldn't get pantry days!")
@@ -427,6 +481,23 @@ app.controller("CallsController", function($scope, $http, $filter) {
 
 	  // Opens booking screen
 	  $scope.openBooking = function(activeClient) {
+
+	  	// Get the pantry days from the server
+		  $http.get("http://bookmefish.herokuapp.com/pantry_days.json").
+				success(function(data){
+					$scope.openPantryDays = data.pantry_days
+						.filter(function(day){
+							return day.open_slot === true
+						})
+						.map(function(day){
+							day.formatted_date = moment(day.date_time).format("L")
+							return day
+						});
+				}).
+				error(function(data) {
+					console.log("error! couldn't get pantry days!")
+				})
+
 	  	$("#book-client").modal({
 	  		showClose: false
 	  	});
@@ -462,21 +533,10 @@ app.controller("CallsController", function($scope, $http, $filter) {
 
 	  $scope.addAppt = function(activeClient) {
 
-	  	// Format the pantry days array for searching
-	  	var formattedPDs = $scope.pantryDays;
-	  	var date = $("#book-datepicker").val();
-
-	  	for (var i = 0; i < $scope.pantryDays.length; i++) {
-	  		formattedPDs[i].date_time = moment(formattedPDs[i].date_time).format('L');
-	  	}
-
-	  	// Check if the date is a pantry day
-	  	var apptDate = _.findWhere(formattedPDs, {date_time: date});
-	  	
 	  	// Send appt to server
 	  	$http.post("http://bookmefish.herokuapp.com/appointments", {
 	  		appointment: { 
-	  			pantry_day_id: apptDate.id, 
+	  			pantry_day_id: activeClient.pantryDay, 
 	  			client_id: activeClient.client.id,
 	  			utilities: activeClient.utilities
 	  		}
