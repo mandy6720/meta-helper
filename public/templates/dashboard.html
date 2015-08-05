@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
-	<div class="content-container" ng-controller="CalendarController">
+	<div class="content-container">
 			
 			<div id="dayAtaGlance">
 				<div id="calendarPage">
@@ -24,8 +18,11 @@
 				<h2>Calls at a Glance</h2>  <div id="create-vm" ng-click="openVM()">Log a voicemail</div><br/>
 				<table>
 					<div class="vm" ng-repeat="voicemail in toCall">	
-						{{ voicemail.client.first_name }} {{ voicemail.client.last_name }} - {{ voicemail.client.display_phone}}
-						<span class="callBack" ng-click="makeActive(voicemail)"><i class="fa fa-phone"></i></span>
+						<div>{{ voicemail.client.first_name }} {{ voicemail.client.last_name }}</div>
+						<div>
+							{{ voicemail.client.display_phone}}
+							<span class="callBack" ng-click="makeActive(voicemail)"><i class="fa fa-phone"></i></span>
+						</div>
 					</div>
 				</table>
 
@@ -95,21 +92,38 @@
 					<br />
 					<label>Phone: <input ng-model="newVM.display_phone" /> 
 					<br /></label>
+					<button ng-click="searchClients(newVM)">Search Clients</button>
+					<div ng-show="clientSearched">
+						<br />
+						<label>
+							Client: <select
+								ng-options="client.id as client.data for client in clients"
+								ng-model="newVM.clientID">
+							</select>
+						<br/>
+						</label>
+						<label>Notes:<textarea id="vm-note" ng-model="newVM.note"></textarea></label>
+						<br />
+					
+						<button ng-click="addVoicemail(newVM)">Add Voicemail</button>
+					</div>
+
 					<br />
-					<label>Notes:<textarea id="vm-note"></textarea></label>
-					<br />
-					<button ng-click="searchClients(newVM)">Add Voicemail</button>
-					<br /><br />
 				</form>
 
 				<!-- Books a client -->
 				<form id="book-client" class="modal">
 					<h2>Book a client</h2><br />
-					<label>Date: <input id="book-datepicker" /></label> 
+					<label>
+						Date: 
+						<select 
+							ng-options="day.id as day.formatted_date for day in openPantryDays"
+							ng-model="activeClient.pantryDay">
+						</select>
+					</label> 
 					<span id="found-avail"></span>
 					<br /><br />
 					<label>Utilities? <input type="checkbox" ng-model="activeClient.utilities"></label><br /><br />
-					<button ng-click="searchAvail(activeClient)">Search availability</button>
 					<button ng-click="addAppt(activeClient)">Add Appointment</button>
 					<label></label>
 				</form>
@@ -117,10 +131,5 @@
 			</div>
 
 
-		</div>
+	</div>
 
-		<script>
-		$( "#book-datepicker").datepicker();
-		</script>
-</body>
-</html>
